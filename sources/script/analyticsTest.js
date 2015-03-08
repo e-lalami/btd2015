@@ -1,9 +1,10 @@
 f = require('utils').format;
 var analyticUrl="",
-    waProxy_Started=false;
+    waRecorder_Started=false;
 // listening to a custom event
 
-
+phantom.page.injectJs('pageObject/SearchPage.js');
+phantom.page.injectJs('pageObject/MainMenu.js');
 
 
 casper.on('analytics.request', function() {
@@ -19,20 +20,20 @@ casper.on('resource.received', function(resource) {
     var url = resource.url;
     var stage = resource.stage;
     
-    if (stage=="end" & isAnalyticsUrl(url) & waProxy_Started ){
+    if (stage=="end" & isAnalyticsUrl(url) & waRecorder_Started ){
 	analyticUrl=url;
-	this.echo(isAnalyticsUrl(url));
+	//this.echo(isAnalyticsUrl(url));
 	this.emit('analytics.request');	 
       }    
 });
 
 
-function startWaProxy(){
-	waProxy_Started=true;
+function startWaRecorder(){
+	waRecorder_Started=true;
 	}
 
-function stopWaProxy(){
-	waProxy_Started=false;
+function stopWaRecorder(){
+	waRecorder_Started=false;
 	analyticUrl="";
 	}
 
@@ -41,11 +42,7 @@ function isAnalyticsUrl(url) {
     return url.indexOf("piwik.php") > -1;
 }
 
-//http://btdconf.com/piwik/piwik.php?action_name=btdconf.com%2FBTD2015%20-%20Belgium%20Testing%20Days&idsite=2&rec=1&r=218989&h=0&m=41&s=35&url=http%3A%2F%2Fbtdconf.com%2F&urlref=http%3A%2F%2Fwww.google.fr%2Fsearch%3Fhl%3Dfr%26source%3Dhp%26q%3Dbtd%2Bconf%26gbv%3D2%26oq%3D%26gs_l%3D&_id=789f2f4f4ce21d57&_idts=1425685296&_idvc=1&_idn=1&_refts=1425685296&_viewts=1425685296&_ref=http%3A%2F%2Fwww.google.fr%2Fsearch%3Fhl%3Dfr%26source%3Dhp%26q%3Dbtd%2Bconf%26gbv%3D2%26oq%3D%26gs_l%3D&send_image=0&cookie=1&res=1024x768
-
-
-
-//require a proxy started
+//require a waRecorder started
 function getUrlParameterByName(url,name) {
 	searchLocation=url.split("?")[1];
 	searchDecoded = decodeURIComponent(searchLocation)
@@ -56,53 +53,35 @@ function getUrlParameterByName(url,name) {
 }
 
 
+var searchPage = new SearchPage();
+var mainMenu = new MainMenu();
 
-casper.test.comment('Open Google');
-
+casper.test.comment('Step 1 - Open Google');
 
 casper.start('http://google.fr/', function() {
-	
-casper.test.comment('Search for btd conf');
+		
+casper.test.comment('Step 2 - Search for btd conf');
+searchPage.fillSearchFormAndSubmit('btd conf');
 
-casper.thenEvaluate(function(term) {
-    document.querySelector('input[name="q"]').setAttribute('value', term);
-    document.querySelector('form[name="f"]').submit();
-}, 'btd conf');
+casper.test.comment('Step 3 - Choose the first result to btd home page');
+searchPage.chooseFisrtResult();
 
+casper.test.comment('Step 4 - Visit btd home page');  
+
+casper.test.comment('Step 5 - Contact BTD team');
 casper.then(function() {
-    // Click on 1st result link
-
-casper.test.comment('Click on fisrt result');
-
-    this.click('h3.r a');
-    
-});
-
-
-casper.then(function() {
-    // Click on contact link
-casper.test.comment('Click Contact Menu');
- this.clickLabel('Contact', 'a');
-startWaProxy();
-    
+	mainMenu.contact();
+	startWaRecorder();
 });
 
 casper.then(function() {
-    
-
-casper.waitForResource(/piwik/, function() {
-    casper.test.assertEquals("http://www.google.fr/search?hl=fr&source=hp&q=btd+conf&gbv=2&oq=&gs_l=",getUrlParameterByName(analyticUrl,"_ref"),"referer should be propagated");
-    //casper.test.assertEquals("http://btdconf.com/contact/",getUrlParameterByName(analyticUrl,"url"),"contat url should be tracked");
+	casper.waitForResource(/piwik/, function() {
+		casper.test.assertEquals("http://www.google.fr/search?hl=fr&source=hp&q=btd+conf&gbv=2&oq=&gs_l=",getUrlParameterByName(analyticUrl,"_ref"),"referer should be propagated");
+		//check with daniel if it is a problem to have strong test  
+		//casper.test.assertEquals("http://btdconf.com/contact/",getUrlParameterByName(analyticUrl,"url"),"contat url should be tracked");
+		});		
 	});
-    
 });
-
-
-
- 
-});
-
-
 
 
 casper.run(function() {
