@@ -2,14 +2,20 @@ f = require('utils').format;
 var analyticUrl="",
     waRecorder_Started=false;
 // listening to a custom event
+if(phantom.page.injectJs('./pageObject/SearchPage.js')) {
+   this.echo('SearchPage injected');  
+  }else
+  {
+	this.echo('SearchPage not injected'); 
+	}
+}
 
-phantom.page.injectJs('./pageObject/SearchPage.js');
 phantom.page.injectJs('./pageObject/MainMenu.js');
 
 
 casper.on('analytics.request', function() {
 	/*	this.echo('analytic request : ' + analyticUrl);
-		tthis.echo('-----------');
+		this.echo('-----------');
 		this.echo('param is : ' + getUrlParameterByName(analyticUrl,"_ref"));
 		this.echo('-----------');*/
 });
