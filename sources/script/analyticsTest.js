@@ -9,7 +9,7 @@ phantom.page.injectJs('pageObject/MainMenu.js');
 
 casper.on('analytics.request', function() {
 	/*	this.echo('analytic request : ' + analyticUrl);
-		this.echo('-----------');
+		tthis.echo('-----------');
 		this.echo('param is : ' + getUrlParameterByName(analyticUrl,"_ref"));
 		this.echo('-----------');*/
 });
@@ -64,7 +64,7 @@ casper.test.comment('Step 2 - Search for btd conf');
 searchPage.fillSearchFormAndSubmit('btd conf');
 
 casper.test.comment('Step 3 - Choose the first result to btd home page');
-searchPage.chooseFisrtResult();
+searchPage.chooseFirstResult();
 
 casper.test.comment('Step 4 - Visit btd home page');  
 

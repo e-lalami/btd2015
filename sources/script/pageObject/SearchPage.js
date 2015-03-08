@@ -6,7 +6,7 @@ function SearchPage() {
 	}, searchTerms);
 	};
 	
-	this.chooseFisrtResult = function() {
+	this.chooseFirstResult = function() {
     casper.then(function () {
       this.click('h3.r a');
 		});
