@@ -8,10 +8,10 @@ phantom.page.injectJs('pageObject/MainMenu.js');
 
 
 casper.on('analytics.request', function() {
-		this.echo('analytic request : ' + analyticUrl);
+	/*	this.echo('analytic request : ' + analyticUrl);
 		this.echo('-----------');
 		this.echo('param is : ' + getUrlParameterByName(analyticUrl,"_ref"));
-		this.echo('-----------');
+		this.echo('-----------');*/
 });
 
 // Check if a ressource is received
