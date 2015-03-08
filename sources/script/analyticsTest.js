@@ -3,8 +3,8 @@ var analyticUrl="",
     waRecorder_Started=false;
 // listening to a custom event
 
-phantom.page.injectJs('pageObject/SearchPage.js');
-phantom.page.injectJs('pageObject/MainMenu.js');
+phantom.page.injectJs('./pageObject/SearchPage.js');
+phantom.page.injectJs('./pageObject/MainMenu.js');
 
 
 casper.on('analytics.request', function() {
