@@ -92,7 +92,7 @@ casper.then(function() {
 
 casper.waitForResource(/piwik/, function() {
     casper.test.assertEquals("http://www.google.fr/search?hl=fr&source=hp&q=btd+conf&gbv=2&oq=&gs_l=",getUrlParameterByName(analyticUrl,"_ref"),"referer should be propagated");
-    casper.test.assertEquals("http://btdconf.com/contact/",getUrlParameterByName(analyticUrl,"url"),"contcat url should be tracked");
+    //casper.test.assertEquals("http://btdconf.com/contact/",getUrlParameterByName(analyticUrl,"url"),"contat url should be tracked");
 	});
     
 });
@@ -104,4 +104,8 @@ casper.waitForResource(/piwik/, function() {
 
 
 
-casper.run();
+
+casper.run(function() {
+    this.test.done(1);
+});
+
