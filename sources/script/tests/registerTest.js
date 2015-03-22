@@ -11,15 +11,17 @@ casper.test.comment('Step 2 - Visit registration page');
 casper.start('http://btdconf.com/registration/', function() {
 
 casper.waitFor(function check() {
-    return pixelTrackingRecorder.getNumberOfPixelTracking()>nbPixelTracking + 1;  
+    return pixelTrackingRecorder.getNumberOfPixelTracking()>nbPixelTracking;  
 	}, 
 	function then() {
 		casper.test.assertEquals(pixelTrackingRecorder.getValueForTheKeyForTheLastRecord('events'),"scAdd","add to cart should be tracked");
 	}
 	);
 });
-casper.test.comment('Step 3 - Stop the pixel tracking recorder');
-pixelTrackingRecorder.stop();
+casper.then(function() {
+	casper.test.comment('Step 6 - Stop the pixel tracking recorder');
+	pixelTrackingRecorder.stop();
+});
 
 casper.run(function() {
     this.test.done(1);
