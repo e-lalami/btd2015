@@ -2,7 +2,6 @@ function pixelTrackingRecorder() {
 	this.started=false;
 	this.analyticUrl="";
     this.analyticUrls=new Array();
-    this.merde="merde";
 
 	this.start = function() {
 		this.started=true;
