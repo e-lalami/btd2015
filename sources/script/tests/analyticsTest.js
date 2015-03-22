@@ -1,32 +1,20 @@
 f = require('utils').format;
 
-TEST_Path = '/home/yann/sources/conference/btd2015/sources/script'
+ROOT_Path = '/home/yann/sources/conference/btd2015/sources/script'
+phantom.page.injectJs(ROOT_Path +'/casperCustomScripts/injection.js');
+var injector = new injection();
 
-SearchPageInjected= phantom.page.injectJs(TEST_Path +'/pageObject/SearchPage.js');
-phantom.page.injectJs(TEST_Path + '/pageObject/MainMenu.js');
-phantom.page.injectJs(TEST_Path + '/waTools/pixelTrackingRecorder.js');
-phantom.page.injectJs(TEST_Path + '/waTools/toolBox.js');
-
-
-// Check if a ressource is received
-casper.on('resource.received', function(resource) {
-    var status = resource.status;
-    var url = resource.url;
-    var stage = resource.stage;
-    
-    if (stage=="end" & toolBox.isAnalyticsUrl(url) & pixelTrackingRecorder.isStarted() ){
-	pixelTrackingRecorder.addRecord(url);
-//	this.echo("pixel tracking recorded");
-    }    
-});
-
-
-
+injector.loadTools(phantom.page,ROOT_Path);
+injector.loadPageObjects(phantom.page,ROOT_Path);
+injector.loadEvents(phantom.page,ROOT_Path);
 
 var searchPage = new SearchPage();
 var mainMenu = new MainMenu();
 var pixelTrackingRecorder = new pixelTrackingRecorder();
 var toolBox= new toolBox();
+var casperEvents= new casperEvents();
+
+casperEvents.declareOnRessourceReceived(casper,pixelTrackingRecorder);
 
 casper.test.comment('Step 1 - Open Google');
 
@@ -44,7 +32,6 @@ casper.test.comment('Step 5 - Contact BTD team');
 casper.then(function() {
 	mainMenu.contact();
 	pixelTrackingRecorder.start();
-
 });
 
 casper.then(function() {
