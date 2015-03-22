@@ -37,8 +37,10 @@ casper.waitFor(function check() {
 	}
 	);
 });
-casper.test.comment('Step 6 - Stop the pixel tracking recorder');
-pixelTrackingRecorder.stop();
+casper.then(function() {
+	casper.test.comment('Step 6 - Stop the pixel tracking recorder');
+	pixelTrackingRecorder.stop();
+});
 
 
 casper.run(function() {
