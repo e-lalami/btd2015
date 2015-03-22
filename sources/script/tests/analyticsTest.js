@@ -1,6 +1,9 @@
 f = require('utils').format;
 
-ROOT_Path = '/home/yann/sources/conference/btd2015/sources/script';
+if(casper.cli.has("ROOT_Path"))
+	{ ROOT_Path =casper.cli.get("ROOT_Path")}
+else 
+	{ROOT_Path = '/home/yann/sources/conference/btd2015/sources/script'}
 phantom.page.injectJs(ROOT_Path +'/casperCustomScripts/initialization.js');
 
 var searchPage = new SearchPage();
