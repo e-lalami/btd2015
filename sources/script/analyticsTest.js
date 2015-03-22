@@ -1,9 +1,11 @@
 f = require('utils').format;
-var analyticUrl="";
-SearchPageInjected= phantom.page.injectJs('./pageObject/SearchPage.js');
-phantom.page.injectJs('./pageObject/MainMenu.js');
-phantom.page.injectJs('./waTools/pixelTrackingRecorder.js');
-phantom.page.injectJs('./waTools/toolBox.js');
+
+TEST_Path = '/home/yann/sources/conference/btd2015/sources/script'
+
+SearchPageInjected= phantom.page.injectJs(TEST_Path +'/pageObject/SearchPage.js');
+phantom.page.injectJs(TEST_Path + '/pageObject/MainMenu.js');
+phantom.page.injectJs(TEST_Path + '/waTools/pixelTrackingRecorder.js');
+phantom.page.injectJs(TEST_Path + '/waTools/toolBox.js');
 
 
 // Check if a ressource is received
