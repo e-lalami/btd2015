@@ -1,20 +1,11 @@
 f = require('utils').format;
 
-ROOT_Path = '/home/yann/sources/conference/btd2015/sources/script'
-phantom.page.injectJs(ROOT_Path +'/casperCustomScripts/injection.js');
-var injector = new injection();
-
-injector.loadTools(phantom.page,ROOT_Path);
-injector.loadPageObjects(phantom.page,ROOT_Path);
-injector.loadEvents(phantom.page,ROOT_Path);
+ROOT_Path = '/home/yann/sources/conference/btd2015/sources/script';
+phantom.page.injectJs(ROOT_Path +'/casperCustomScripts/initialization.js');
 
 var searchPage = new SearchPage();
 var mainMenu = new MainMenu();
-var pixelTrackingRecorder = new pixelTrackingRecorder();
-var toolBox= new toolBox();
-var casperEvents= new casperEvents();
 
-casperEvents.declareOnRessourceReceived(casper,pixelTrackingRecorder);
 
 casper.test.comment('Step 1 - Open Google');
 
@@ -34,12 +25,20 @@ casper.then(function() {
 	pixelTrackingRecorder.start();
 });
 
-casper.then(function() {
-	casper.waitForResource(/piwik/, function() {
+
+
+var nbPixelTracking = pixelTrackingRecorder.getNumberOfPixelTracking();
+
+casper.waitFor(function check() {
+    return pixelTrackingRecorder.getNumberOfPixelTracking()>nbPixelTracking ;  
+	}, 
+	function then() {
 		casper.test.assertEquals(pixelTrackingRecorder.getValueForTheKeyForTheLastRecord('_ref'),"http://www.google.fr/search?hl=fr&source=hp&q=btd+conf&gbv=2&oq=&gs_l=","referer should be propagated");
-		});		
-	});
+	}
+	);
 });
+casper.test.comment('Step 6 - Stop the pixel tracking recorder');
+pixelTrackingRecorder.stop();
 
 
 casper.run(function() {
