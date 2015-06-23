@@ -17,11 +17,17 @@ var lastMessageRemote="";
 
 casperEvents.declareOnRessourceReceived(casper,pixelTrackingRecorder);
 
+casper.test.on('fail', function(failure) {
+    // failure type : assert or fail
+    if(failure.type.indexOf('assert') !==-1 || failure.type ==='fail'){
+        failure.description = "Message : " + failure.message + "\nLine : " + failure.line + "\nCode : " + failure.lineContents;
+    }
+    
+});
+
 casper.on('remote.message', function(msg) {
    // casper.log('remote message caught: ' + msg,'info');
     lastMessageRemote=msg;
 });
 
-casper.test.on("fail", function(failure) {
-    failure.message = "Message : " + failure.message + "\nLine : "+ failure.line + "\nCode : " + failure.lineContents;
-});
+
